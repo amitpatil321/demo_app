@@ -13,6 +13,10 @@ function App() {
           label="Increment"
           onClick={() => setCount((count) => count + 1)}
         />
+        <Button
+          label="Decrement"
+          onClick={() => setCount((count) => count - 1)}
+        />
         <Button label="Reset" onClick={() => setCount(0)} />
       </div>
     </div>
