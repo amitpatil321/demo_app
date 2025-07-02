@@ -5,18 +5,20 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
+
+  const changeCount = (action) => {
+    if (action === "dec") {
+      if (count <= 0) return;
+      setCount((count) => count - 1);
+    } else setCount((count) => count + 1);
+  };
+
   return (
     <div className="counter-container">
       <h2>{count}</h2>
       <div className="buttons">
-        <Button
-          label="Increment"
-          onClick={() => setCount((count) => count + 1)}
-        />
-        <Button
-          label="Decrement"
-          onClick={() => setCount((count) => count - 1)}
-        />
+        <Button label="Increment" onClick={() => changeCount("inc")} />
+        <Button label="Decrement" onClick={() => changeCount("dec")} />
         <Button label="Reset" onClick={() => setCount(0)} />
       </div>
     </div>
