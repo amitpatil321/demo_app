@@ -12,3 +12,15 @@
 .read-the-docs {
   color: #888;
 }
+
+.counter-container {
+  width: 400px;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}

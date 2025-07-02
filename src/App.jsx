@@ -6,12 +6,15 @@ import "./App.css";
 function App() {
   const [count, setCount] = useState(0);
   return (
-    <div>
+    <div className="counter-container">
       <h2>{count}</h2>
-      <Button
-        label="Increment"
-        onClick={() => setCount((count) => count + 1)}
-      />
+      <div className="buttons">
+        <Button
+          label="Increment"
+          onClick={() => setCount((count) => count + 1)}
+        />
+        <Button label="Reset" onClick={() => setCount(0)} />
+      </div>
     </div>
   );
 }
