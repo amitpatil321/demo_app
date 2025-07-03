@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'your-dockerhub-username/counter-app:latest'
+        DOCKER_IMAGE = 'amitpatil126/counter-app:latest'
         APP_SERVER_IP = '34.238.40.189'
     }
 
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sshagent(['app-server-ssh']) {
                     sh """
-                    ssh ec2-user@${APP_SERVER_IP} '
+                    ssh ubuntu@${APP_SERVER_IP} '
                         docker pull ${DOCKER_IMAGE} &&
                         docker stop react-container || true &&
                         docker rm react-container || true &&
