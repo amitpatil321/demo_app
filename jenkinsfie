@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/counter-app:latest'
+        APP_SERVER_IP = '34.238.40.189'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/amitpatil321/demo_app.git', branch: 'main'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t counter-app:latest .'
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker tag counter-app:latest $DOCKER_IMAGE
+                    docker push $DOCKER_IMAGE
+                    '''
+                }
+            }
+        }
+        stage('Deploy to App Server') {
+            steps {
+                sshagent(['app-server-ssh']) {
+                    sh """
+                    ssh ec2-user@${APP_SERVER_IP} '
+                        docker pull ${DOCKER_IMAGE} &&
+                        docker stop react-container || true &&
+                        docker rm react-container || true &&
+                        docker run -d --name react-container -p 80:80 ${DOCKER_IMAGE}
+                    '
+                    """
+                }
+            }
+        }
+        // stage('Install dependencies') {
+        //     steps {
+        //         sh 'npm install'
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         sh 'npm run build'
+        //     }
+        // }
+        // stage('Deploy build files to Nginx server') {
+        //     steps {
+        //         script {
+        //             step([
+        //                 $class: 'BapSshPublisherPlugin',
+        //                 publishers: [
+        //                     [
+        //                         configName: 'Application Server',
+        //                         transfers: [
+        //                             [
+        //                                 sourceFiles: 'dist/**',
+        //                                 removePrefix: 'dist',
+        //                                 remoteDirectory: '/var/www/vhosts/frontend/',
+        //                                 execCommand: 'echo "Deployment done!"'
+        //                             ]
+        //                         ],
+        //                         usePromotionTimestamp: false,
+        //                         verbose: true
+        //                     ]
+        //                 ]
+        //             ])
+        //         }
+        //     }
+        // }
+    }
+}
