@@ -17,6 +17,7 @@
   width: 400px;
   text-align: center;
   border: 2px solid purple;
+  box-shadow: 4px 4px 10px #636363;
   border-radius: 8px;
   padding: 20px;
 }
