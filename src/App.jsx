@@ -15,6 +15,7 @@ function App() {
 
   return (
     <div className="counter-container">
+      <h3>My Counter Application</h3>
       <h2>{count}</h2>
       <div className="buttons">
         <Button label="Increment" onClick={() => changeCount("inc")} />
